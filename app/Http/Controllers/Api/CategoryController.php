@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Resources\CategoryResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
@@ -18,14 +19,21 @@ class CategoryController extends Controller
     {
         return new CategoryResource($category);
     }
-    public function list()
-    {
-        return CategoryResource::collection(Category::all());
-    }
     public function store(StoreCategoryRequest $request)
     {
         $category = Category::Create($request->all());
 
         return new CategoryResource($category);
+    }
+    public function update (Category $category, StoreCategoryRequest $request)
+    {
+        $category->update($request->all());
+
+        return new CategoryResource($category);
+    }
+    public function destroy(Category $category){
+        $category->delete();
+
+        return response()->noContent();
     }
 }
