@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Resources\CategoryResource;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
+use Illuminate\Database\QueryException;
 
 class CategoryController extends Controller
 {
@@ -21,17 +23,27 @@ class CategoryController extends Controller
     }
     public function store(StoreCategoryRequest $request)
     {
-        $category = Category::Create($request->all());
+        $data = $request->all();
 
-        return new CategoryResource($category);
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $name = 'categories/' . Str::uuid() . '.' . $file->extension();
+            $file->storePubliclyAs('public', $name);
+            $data['photo'] = $name;
+        }
+            $category = Category::create($data);
+
+            return new CategoryResource($category);
+
     }
-    public function update (Category $category, StoreCategoryRequest $request)
+    public function update(Category $category, StoreCategoryRequest $request)
     {
         $category->update($request->all());
 
         return new CategoryResource($category);
     }
-    public function destroy(Category $category){
+    public function destroy(Category $category)
+    {
         $category->delete();
 
         return response()->noContent();
