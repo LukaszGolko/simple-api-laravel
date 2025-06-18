@@ -9,7 +9,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('categories', \App\Http\Controllers\Api\V1\CategoryController::class);
+    Route::apiResource('categories', \App\Http\Controllers\Api\V2\CategoryController::class);
 
-    Route::get('products', [\App\Http\Controllers\Api\V1\ProductController::class, 'index']);
+    Route::get('products', [\App\Http\Controllers\Api\V2\ProductController::class, 'index']);
 });
