@@ -11,5 +11,5 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('categories', \App\Http\Controllers\Api\V1\CategoryController::class);
 
-    Route::get('products', [\App\Http\Controllers\Api\V1\ProductController::class, 'index']);
+    Route::get('products', [\App\Http\Controllers\Api\V1\ProductController::class, 'index'])->middleware('throttle:2,1');
 });
